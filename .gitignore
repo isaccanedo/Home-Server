@@ -1,0 +1,10 @@
+# Database
+db.sqlite3
+
+# Environments
+.env
+
+# misc
+media/
+local/
+*.log#

@@ -1,0 +1,43 @@
+version: "3"
+
+services:
+  nextcloud:
+    image: atb00ker/homeserver:nextcloud
+    build:
+      context: build
+      dockerfile: nextcloud/Dockerfile
+    volumes:
+      - sslcert_data:/etc/letsencrypt
+      - nextcloud_data:/usr/share/nginx/nextcloud-data/
+    env_file:
+      - .env
+    ports:
+      - "0.0.0.0:443:443"
+    depends_on:
+      - postgres
+      - redis
+
+  postgres:
+    image: atb00ker/homeserver:postgres
+    build:
+      context: build
+      dockerfile: postgres/Dockerfile
+    environment:
+      - POSTGRES_PASSWORD=$NEXTCLOUDDB_PASS
+      - TZ=$TZ
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:alpine
+
+volumes:
+  postgres_data:
+  sslcert_data:
+  nextcloud_data:
+
+networks:
+  default:
+    ipam:
+      config:
+        - subnet: 172.25.0.0/16

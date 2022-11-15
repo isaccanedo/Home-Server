@@ -1,0 +1,1 @@
+*/5 * * * * php -f /usr/share/nginx/nextcloud/cron.php
